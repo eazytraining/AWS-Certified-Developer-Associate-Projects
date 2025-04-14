@@ -1,19 +1,46 @@
 from aws_cdk import (
-    # Duration,
     Stack,
-    # aws_sqs as sqs,
+    aws_lambda as lambda_,
+    aws_apigateway as apigw,  
+    aws_s3 as s3,
+    aws_s3_deployment as s3deploy,
+    RemovalPolicy
 )
 from constructs import Construct
 
 class LabCdkStack(Stack):
+    def __init__(self, scope: Construct, id: str, **kwargs) -> None:
+        super().__init__(scope, id, **kwargs)
 
-    def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
-        super().__init__(scope, construct_id, **kwargs)
+        # Bucket S3 pour site statique
+        bucket = s3.Bucket(
+            self, "WebsiteBucket",
+            removal_policy=RemovalPolicy.DESTROY,
+            auto_delete_objects=True,
+            website_index_document="index.html"
+        )
 
-        # The code that defines your stack goes here
+        # Fonction Lambda
+        hello_lambda = lambda_.Function(
+            self, "HelloHandler",
+            runtime=lambda_.Runtime.PYTHON_3_12,
+            handler="hello.handler",
+            code=lambda_.Code.from_asset("lambda")
+        )
 
-        # example resource
-        # queue = sqs.Queue(
-        #     self, "LabCdkQueue",
-        #     visibility_timeout=Duration.seconds(300),
-        # )
+        # API Gateway
+        api = apigw.LambdaRestApi(
+            self, "HelloAPI",
+            handler=hello_lambda,
+            proxy=False
+        )
+
+        api.root.add_method("GET")
+
+        # Déploiement du site statique 
+        s3deploy.BucketDeployment(
+            self, 
+            "DeploySite",
+            sources=[s3deploy.Source.asset("static_website")],
+            destination_bucket=bucket
+        )

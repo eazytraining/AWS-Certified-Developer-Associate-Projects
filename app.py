@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import os
-
+from aws_cdk import App
 import aws_cdk as cdk
 
 from lab_cdk.lab_cdk_stack import LabCdkStack
