@@ -1,7 +1,5 @@
 # AWS IAM Permission Boundaries Lab
 
-## Lab: Restricting Permissions with IAM Permission Boundaries
-
 ### 📝 Description  
 This lab demonstrates how to use **AWS IAM Permission Boundaries** to enforce the principle of least privilege. You will create a boundary policy to limit the maximum permissions of an IAM user, even if their attached policies grant broader access.  
 
