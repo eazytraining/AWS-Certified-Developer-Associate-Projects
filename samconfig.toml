@@ -19,6 +19,8 @@ s3_bucket = "alphdemobucket"
 s3_prefix = "sam-app"
 region = "us-east-1"
 image_repositories = []
+disable_rollback = true
+
 
 [default.package.parameters]
 resolve_s3 = true
