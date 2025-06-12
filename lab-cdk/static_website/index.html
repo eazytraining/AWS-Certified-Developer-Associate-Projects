@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab CDK Débutant</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f2f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        #response {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            background: #e9ecef;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bienvenue sur le Lab CDK! 🚀</h1>
+        <p>Ce site est hébergé sur S3 et intègre une API Gateway/Lambda</p>
+        
+        <button onclick="callApi()">Tester l'API</button>
+        
+        <div id="response">
+            <!-- La réponse de l'API apparaîtra ici -->
+        </div>
+    </div>
+
+    <script>
+        async function callApi() {
+            const apiUrl = 'REMPLACER_PAR_VOTRE_URL_API/prod/';
+            const responseDiv = document.getElementById('response');
+            
+            try {
+                responseDiv.innerHTML = 'Appel en cours... ⌛';
+                
+                const response = await fetch(apiUrl);
+                const data = await response.text();
+                
+                responseDiv.innerHTML = `
+                    <strong>Réponse de l'API (${response.status}) :</strong><br>
+                    ${data}
+                `;
+            } catch (error) {
+                responseDiv.innerHTML = `
+                    <strong style="color: red">Erreur :</strong><br>
+                    ${error.message}
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
